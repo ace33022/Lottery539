@@ -51,8 +51,6 @@
 		
 			var base;
 			
-			console.log('location.origin: ' + location.origin);
-			
 			/**
 			 *
 			 * @see {@link https://stackoverflow.com/questions/3494954/how-do-i-set-a-pages-base-href-in-javascript|How do I set a page's base href in Javascript? - Stack Overflow}
@@ -79,10 +77,8 @@
 			}
 			else if (location.origin.startsWith('http')) {
 			
-				console.log('http');
 				if ((location.origin.indexOf('127.0.0.1') === -1) && (location.origin.indexOf('localhost') === -1)) {
 			
-					console.log('index');
 					base.setAttribute('href', 'https://ace33022.github.io/htdoc/');
 				}
 			}
