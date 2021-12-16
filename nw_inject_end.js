@@ -72,6 +72,12 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 		var status = '';
 		var retrivedData = '';
 		
+		Logger.useDefaults();
+		
+		Logger.setLevel(Logger.INFO);
+		
+		Logger.log = Logger.info;
+		
 		CommonForm.showMarqueebar({
 		
 			"title": "資料載入中‧‧‧",
