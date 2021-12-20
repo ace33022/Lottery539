@@ -141,21 +141,67 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 				else {
 				
 					// 使用Web Service取得資料。
-					// retrivedData = lottery539LogData;
+					if (location.protocol == 'file:') {
 					
-					// status = 'success';
-					
-					// closeMarqueebar();
-					
-					jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
-					// jQuery.getJSON('http://127.0.0.1:8088/ws/rs/LOT00010', function(data, textStatus, jqXHR) {
-					
-						status = textStatus;
+						jQuery.getJSON('http://127.0.0.1:8088/ws/rs/LOT00010', function(data, textStatus, jqXHR) {
 						
-						if (status == 'success') retrivedData = JSON.stringify(data["result"]);
-
-						closeMarqueebar();
-					});
+							status = textStatus;
+							
+							if (status == 'success') {
+							
+								retrivedData = JSON.stringify(data);
+								
+								closeMarqueebar();
+							}
+							else {
+							
+								jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
+								
+									status = textStatus;
+									
+									if (status == 'success') retrivedData = JSON.stringify(data["result"]);
+									
+									closeMarqueebar();
+								});
+							}
+						});
+					}
+					else if ((location.origin.indexOf('127.0.0.1') != -1) || (location.origin.indexOf('localhost') != -1)) {
+					
+						jQuery.getJSON('http://127.0.0.1:8088/ws/rs/LOT00010', function(data, textStatus, jqXHR) {
+						
+							status = textStatus;
+							
+							if (status == 'success') {
+							
+								retrivedData = JSON.stringify(data);
+								
+								closeMarqueebar();
+							}
+							else {
+							
+								jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
+								
+									status = textStatus;
+									
+									if (status == 'success') retrivedData = JSON.stringify(data["result"]);
+									
+									closeMarqueebar();
+								});
+							}
+						});
+					}
+					else {
+					
+						jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
+						
+							status = textStatus;
+							
+							if (status == 'success') retrivedData = JSON.stringify(data["result"]);
+							
+							closeMarqueebar();
+						});
+					}
 				}
 			},
 			"afterHiddenCallback": function() {
