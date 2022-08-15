@@ -65,7 +65,7 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 
 		var condition = {
 
-			"numCount": [],
+			"numCount": {},
 			"checkedNumber": []
 		};
 		
@@ -74,6 +74,7 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 		
 		Logger.useDefaults();
 		
+		// Logger.setLevel(Logger.DEBUG);
 		Logger.setLevel(Logger.INFO);
 		
 		Logger.log = Logger.info;
@@ -127,6 +128,8 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 						if (err) {
 						
 							console.log('Read file occured error, message: ' + err);
+							
+							closeMarqueebar();
 						}
 						else {
 						
@@ -164,6 +167,17 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 									closeMarqueebar();
 								});
 							}
+						})
+						.fail(function() {
+						
+							jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
+							
+								status = textStatus;
+								
+								if (status == 'success') retrivedData = JSON.stringify(data["result"]);
+								
+								closeMarqueebar();
+							});
 						});
 					}
 					else if ((location.origin.indexOf('127.0.0.1') != -1) || (location.origin.indexOf('localhost') != -1)) {
@@ -189,6 +203,17 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 									closeMarqueebar();
 								});
 							}
+						})
+						.fail(function() {
+						
+							jQuery.getJSON('https://script.google.com/macros/s/AKfycbxlPnF99hcvYijHCCU2_mevaFpZi1g157DBT4Drd-sABh5dEDI7_26wpN10CpfbM1O33Q/exec', function(data, textStatus, jqXHR) {
+							
+								status = textStatus;
+								
+								if (status == 'success') retrivedData = JSON.stringify(data["result"]);
+								
+								closeMarqueebar();
+							});
 						});
 					}
 					else {
@@ -222,6 +247,9 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 							var tag;
 
 							var totalNum = 0;
+							
+							var prizeCount;
+							var arrayPrizeCount = [];
 							
 							var tag = ''
 											// + '<div class="panel panel-default" style="width: 100%;">'
@@ -268,6 +296,9 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 								condition["numCount"][vo.getNum03()]++;
 								condition["numCount"][vo.getNum04()]++;
 								condition["numCount"][vo.getNum05()]++;
+								
+								// function(element, index) {
+								// condition["numCount1"].forEach(function(element, index) { console.log(element); });
 								
 								totalNum = parseInt(vo.getNum01()) + parseInt(vo.getNum02()) + parseInt(vo.getNum03()) + parseInt(vo.getNum04()) + parseInt(vo.getNum05());
 
@@ -461,6 +492,34 @@ Configuration.loadJS(Configuration.requirejsFile, function() {
 							});
 							
 							// new Tablesort(jQuery('#' + tableId)[0]);
+							
+							// 預設選取號碼統計最多的前5個號碼。
+							arrayPrizeCount = [];
+							for (var key in condition["numCount"]) { 
+							
+								prizeCount = {};
+								
+								prizeCount["prizeNumber"] = key;
+								prizeCount["count"] = condition["numCount"][key];
+								
+								arrayPrizeCount.push(prizeCount);
+							}
+							
+							Logger.debug(arrayPrizeCount);
+							
+							arrayPrizeCount = _.sortBy(arrayPrizeCount, 'count');
+							
+							Logger.debug(arrayPrizeCount);
+							
+							condition["checkedNumber"] = [];
+							for (index = arrayPrizeCount.length - 1; index >= (arrayPrizeCount.length - 5); index--) {
+							
+								Logger.debug(arrayPrizeCount[index]["prizeNumber"]);
+							
+								condition["checkedNumber"].push(arrayPrizeCount[index]["prizeNumber"]);
+							}
+							
+							setCheckedNumberBackgroundColor();
 							
 							closeMarqueebar();
 						},
